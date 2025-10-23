@@ -1,0 +1,37 @@
+{
+  "priority_detection": {
+    "version": "1.0.0",
+    "description": "Prompt template for detecting priorities in lifelogs",
+    "template": "Tu es un assistant IA spécialisé dans l'analyse de conversations et notes vocales pour Christian Boulet, fractional CTO.\n\nTa mission : Analyser les transcripts ci-dessous et identifier les priorités d'action.\n\nCritères de détection :\n\n1. **ENGAGEMENTS PRIS** - Actions que Christian a promis de faire\n   - Phrases comme \"je vais...\", \"je te reviens avec...\", \"je m'engage à...\"\n   - Promesses faites à des clients/prospects\n   - Actions spécifiques mentionnées\n\n2. **DEMANDES REÇUES** - Requêtes nécessitant une action de Christian\n   - Questions directes : \"Peux-tu...\", \"J'aurais besoin de...\", \"Pourrais-tu...\"\n   - Requêtes clients à traiter\n   - Informations demandées\n\n3. **DEADLINES** - Urgences temporelles\n   - Dates explicites mentionnées\n   - \"Avant [date]\", \"Pour [jour]\", \"D'ici [deadline]\"\n   - Échéances importantes\n\nPériode analysée : {period}\n\nTranscripts :\n{transcripts}\n\nRetourne un objet JSON structuré comme ceci (et UNIQUEMENT du JSON valide, rien d'autre) :\n\n{{\n  \"engagements\": [\n    {{\n      \"title\": \"Description courte de l'engagement\",\n      \"description\": \"Détails supplémentaires\",\n      \"confidence\": 0.95,\n      \"source\": \"Conversation avec [nom] - [date]\"\n    }}\n  ],\n  \"demandes\": [\n    {{\n      \"title\": \"Description de la demande\",\n      \"description\": \"Contexte et détails\",\n      \"confidence\": 0.90,\n      \"source\": \"Conversation avec [nom] - [date]\"\n    }}\n  ],\n  \"deadlines\": [\n    {{\n      \"title\": \"Action avec deadline\",\n      \"description\": \"Détails\",\n      \"date\": \"YYYY-MM-DD\",\n      \"confidence\": 0.85,\n      \"source\": \"Conversation avec [nom] - [date]\"\n    }}\n  ]\n}}\n\nIMPORTANT : Retourne UNIQUEMENT le JSON, pas de texte avant ou après."
+  },
+  "examples": {
+    "engagement": {
+      "input": "Je vais te préparer une proposition pour le rôle de Fractional CTO d'ici vendredi.",
+      "output": {
+        "title": "Préparer proposition Fractional CTO",
+        "description": "Proposition pour rôle de Fractional CTO",
+        "confidence": 0.95,
+        "source": "Conversation"
+      }
+    },
+    "demande": {
+      "input": "Est-ce que tu peux m'envoyer ton CV et quelques case studies ?",
+      "output": {
+        "title": "Envoyer CV et case studies",
+        "description": "Partager documents professionnels",
+        "confidence": 0.90,
+        "source": "Demande client"
+      }
+    },
+    "deadline": {
+      "input": "Il me faudrait la documentation avant le 25 octobre.",
+      "output": {
+        "title": "Fournir documentation",
+        "description": "Documentation demandée",
+        "date": "2024-10-25",
+        "confidence": 0.95,
+        "source": "Client"
+      }
+    }
+  }
+}

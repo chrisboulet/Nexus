@@ -39,6 +39,8 @@ venv.bak/
 
 # Configuration & Secrets
 config.json
+config/config.yaml
+config.yaml
 token.json
 credentials.json
 .env
