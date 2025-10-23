@@ -136,9 +136,13 @@ Private - All rights reserved
 
 ## Documentation
 
+📖 **[Documentation Index](DOCS.md)** - Complete guide to all documentation
+
+Quick links:
 - **[Quick Start Guide](QUICKSTART.md)** - Get started in 5 minutes
 - **[User Guide](GUIDE.md)** - Complete documentation and troubleshooting
 - **[Notion Setup](NOTION_SETUP.md)** - Setting up your Notion database
+- **[Architecture](ARCHITECTURE.md)** - System design and diagrams
 - **[Contributing](CONTRIBUTING.md)** - Developer guide for contributors
 
 ## Support
