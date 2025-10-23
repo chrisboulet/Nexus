@@ -134,6 +134,31 @@ This is a private project for Boulet Stratégies TI. For questions or contributi
 
 Private - All rights reserved
 
+## Documentation
+
+- **[Quick Start Guide](QUICKSTART.md)** - Get started in 5 minutes
+- **[User Guide](GUIDE.md)** - Complete documentation and troubleshooting
+- **[Notion Setup](NOTION_SETUP.md)** - Setting up your Notion database
+- **[Contributing](CONTRIBUTING.md)** - Developer guide for contributors
+
 ## Support
 
 For issues or questions, please open an issue in the repository or contact the development team.
+
+## Roadmap
+
+### Planned Features
+- [ ] Bidirectional sync between platforms
+- [ ] Advanced filtering and rules engine
+- [ ] Web dashboard for monitoring
+- [ ] Mobile app integration
+- [ ] AI-powered insights and suggestions
+- [ ] Slack/Teams notifications
+- [ ] Custom webhook support
+
+### Future Integrations
+- [ ] Microsoft Teams
+- [ ] Slack
+- [ ] Trello/Asana
+- [ ] Zoom
+- [ ] Email (Gmail, Outlook)
