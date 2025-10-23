@@ -1,0 +1,23 @@
+# NEXUS Configuration Example
+# Copy this file to config/config.yaml and fill in your API keys
+
+limitless:
+  api_key: "lim_xxxxxxxxxxxx"
+  endpoint: "https://api.limitless.ai/v1"
+
+notion:
+  token: "secret_xxxxxxxxxxxx"
+  todo_database_id: "xxxxx-xxxxx-xxxxx"
+  crm_database_id: "xxxxx-xxxxx-xxxxx"
+
+anthropic:
+  api_key: "sk-ant-xxxxxxxxxxxx"
+  model: "claude-sonnet-4-5-20250929"
+
+priority_detector:
+  confidence_threshold: 0.8
+  max_priorities_per_day: 10
+
+logging:
+  level: "INFO"
+  file: "nexus.log"

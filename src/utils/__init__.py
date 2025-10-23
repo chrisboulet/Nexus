@@ -1,8 +1,8 @@
 """
-Utilities package
+NEXUS Utilities
+Configuration management and helpers
 """
 
 from .config import Config
-from .logger import setup_logger
 
-__all__ = ['Config', 'setup_logger']
+__all__ = ['Config']
