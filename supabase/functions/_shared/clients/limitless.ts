@@ -29,16 +29,16 @@ export class LimitlessClient {
 
       console.log(`[Limitless] Fetching lifelogs since ${sinceISO}`);
 
-      const response = await fetch(`${this.endpoint}/lifelogs`, {
+      const url = new URL(`${this.endpoint}/lifelogs`);
+      url.searchParams.append('since', sinceISO);
+      url.searchParams.append('limit', limit.toString());
+      url.searchParams.append('include_transcripts', 'true');
+
+      const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.apiKey}`,
           'Content-Type': 'application/json',
-        },
-        params: {
-          since: sinceISO,
-          limit: limit.toString(),
-          include_transcripts: 'true',
         },
       });
 
