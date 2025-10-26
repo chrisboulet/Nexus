@@ -1,0 +1,18 @@
+{
+  "tasks": {
+    "dev": "supabase functions serve --env-file .env",
+    "deploy": "supabase functions deploy",
+    "deploy:daily": "supabase functions deploy nexus-daily-sync",
+    "deploy:weekly": "supabase functions deploy nexus-weekly-sync"
+  },
+  "imports": {
+    "@supabase/functions-js": "https://esm.sh/@supabase/functions-js@2.1.5",
+    "@anthropic-ai/sdk": "npm:@anthropic-ai/sdk@^0.20.0",
+    "googleapis": "npm:googleapis@^128.0.0"
+  },
+  "compilerOptions": {
+    "allowJs": true,
+    "lib": ["deno.window"],
+    "strict": true
+  }
+}
