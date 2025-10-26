@@ -37,7 +37,7 @@ export class LimitlessClient {
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          'X-API-Key': this.apiKey,
           'Content-Type': 'application/json',
         },
       });
@@ -95,7 +95,7 @@ export class LimitlessClient {
       const response = await fetch(`${this.endpoint}/search`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          'X-API-Key': this.apiKey,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -130,7 +130,7 @@ export class LimitlessClient {
       const response = await fetch(`${this.endpoint}/health`, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
+          'X-API-Key': this.apiKey,
         },
       });
       return response.ok;
