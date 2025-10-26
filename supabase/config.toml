@@ -19,7 +19,7 @@ enabled = false
 
 [realtime]
 enabled = true
-ip_version = "ipv4"
+ip_version = "IPv4"
 
 [studio]
 enabled = true
@@ -50,7 +50,7 @@ double_confirm_changes = true
 enable_confirmations = false
 
 # Edge Functions Configuration
-[functions.nexus-daily-sync]
+[functions.nexus-realtime-sync]
 verify_jwt = false
 
 [functions.nexus-weekly-sync]
