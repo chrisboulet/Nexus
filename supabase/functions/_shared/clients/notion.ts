@@ -3,7 +3,7 @@
  * Manage CRM (Leads, Clients, Projects) in Notion workspace
  */
 
-import { Client } from 'npm:@notionhq/client@^2.2.0';
+import { Client } from 'npm:@notionhq/client@2.2.15';
 import type { NotionLead, NotionClient, NotionProject } from '../types/index.ts';
 
 export class NotionClient {

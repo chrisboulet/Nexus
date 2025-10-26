@@ -3,7 +3,7 @@
  * Create and manage tasks in Google Tasks
  */
 
-import { google } from 'googleapis';
+import { google } from 'npm:googleapis@^128.0.0';
 import type { Priority, GoogleTask, GoogleTasksList, Context } from '../types/index.ts';
 
 export class GoogleTasksClient {

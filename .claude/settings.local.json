@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.limitless.ai)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(git mv:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

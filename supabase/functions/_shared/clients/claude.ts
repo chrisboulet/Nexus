@@ -3,7 +3,7 @@
  * AI-powered priority detection and analysis
  */
 
-import Anthropic from '@anthropic-ai/sdk';
+import Anthropic from 'npm:@anthropic-ai/sdk@^0.20.0';
 import type {
   LimitlessConversation,
   Priority,
