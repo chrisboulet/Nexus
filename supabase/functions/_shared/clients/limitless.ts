@@ -47,7 +47,7 @@ export class LimitlessClient {
       }
 
       const data = await response.json();
-      const lifelogs = data.lifelogs || [];
+      const lifelogs = data.data?.lifelogs || [];
 
       console.log(`[Limitless] Retrieved ${lifelogs.length} lifelogs`);
       return lifelogs;
