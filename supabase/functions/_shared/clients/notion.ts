@@ -4,7 +4,7 @@
  */
 
 import { Client } from 'npm:@notionhq/client@2.2.15';
-import type { NotionLead, NotionClient, NotionProject } from '../types/index.ts';
+import type { NotionLead, NotionClient, NotionProject, Priority } from '../types/index.ts';
 
 export class NotionClient {
   private client: Client;
@@ -12,6 +12,7 @@ export class NotionClient {
   private leadsDatabase?: string;
   private clientsDatabase?: string;
   private projectsDatabase?: string;
+  private prioritiesDatabase?: string;
 
   constructor(
     token: string,
@@ -20,6 +21,7 @@ export class NotionClient {
       leads?: string;
       clients?: string;
       projects?: string;
+      priorities?: string;
     }
   ) {
     this.client = new Client({ auth: token });
@@ -27,6 +29,7 @@ export class NotionClient {
     this.leadsDatabase = databases?.leads;
     this.clientsDatabase = databases?.clients;
     this.projectsDatabase = databases?.projects;
+    this.prioritiesDatabase = databases?.priorities;
   }
 
   /**
@@ -286,6 +289,81 @@ export class NotionClient {
       'someday': '⚪ Someday',
     };
     return statusMap[status] || status;
+  }
+
+  /**
+   * Create a new priority in Notion
+   * @param priority - Priority information
+   * @returns Created page object
+   */
+  async createPriority(priority: Priority): Promise<any> {
+    if (!this.prioritiesDatabase) {
+      throw new Error('Priorities database ID not configured');
+    }
+
+    try {
+      console.log(`[Notion] Creating priority: ${priority.title}`);
+
+      const response = await this.client.pages.create({
+        parent: { database_id: this.prioritiesDatabase },
+        properties: {
+          'Titre': {
+            title: [{ text: { content: priority.title } }],
+          },
+          'Type': {
+            select: { name: this.formatPriorityType(priority.type) },
+          },
+          'Contexte': priority.context
+            ? { select: { name: priority.context } }
+            : undefined,
+          'Durée': priority.duration
+            ? { select: { name: priority.duration } }
+            : undefined,
+          'Échéance': priority.dueDate
+            ? { date: { start: priority.dueDate.toISOString().split('T')[0] } }
+            : undefined,
+          'Confiance': {
+            number: Math.round(priority.confidence * 100),
+          },
+          'Source': {
+            rich_text: [{ text: { content: priority.source } }],
+          },
+          'Statut': {
+            select: { name: 'À faire' },
+          },
+        },
+        children: priority.description
+          ? [
+              {
+                object: 'block',
+                type: 'paragraph',
+                paragraph: {
+                  rich_text: [{ text: { content: priority.description } }],
+                },
+              },
+            ]
+          : undefined,
+      });
+
+      console.log(`[Notion] Priority created: ${response.id}`);
+      return response;
+
+    } catch (error) {
+      console.error('[Notion] Failed to create priority:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Format priority type for Notion select
+   */
+  private formatPriorityType(type: string): string {
+    const typeMap: Record<string, string> = {
+      'engagement': 'Engagement',
+      'demande': 'Demande',
+      'deadline': 'Deadline',
+    };
+    return typeMap[type] || type;
   }
 
   /**

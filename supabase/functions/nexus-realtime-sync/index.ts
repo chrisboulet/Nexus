@@ -13,7 +13,7 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { LimitlessClient } from '../_shared/clients/limitless.ts';
 import { ClaudeClient } from '../_shared/clients/claude.ts';
-import { GoogleTasksClient } from '../_shared/clients/google-tasks.ts';
+import { NotionClient } from '../_shared/clients/notion.ts';
 import { NexusSupabaseClient } from '../_shared/utils/supabase-client.ts';
 import { createLogger } from '../_shared/utils/logger.ts';
 import type { Priority, SyncResult } from '../_shared/types/index.ts';
@@ -39,9 +39,12 @@ serve(async (req: Request) => {
       Deno.env.get('ANTHROPIC_MODEL')
     );
 
-    const googleTasks = new GoogleTasksClient(
-      Deno.env.get('GOOGLE_CREDENTIALS')!,
-      Deno.env.get('GOOGLE_TASKS_LIST_ID')
+    const notion = new NotionClient(
+      Deno.env.get('NOTION_TOKEN')!,
+      Deno.env.get('NOTION_WORKSPACE_ID')!,
+      {
+        priorities: Deno.env.get('NOTION_PRIORITIES_DATABASE_ID'),
+      }
     );
 
     const supabase = new NexusSupabaseClient();
@@ -184,12 +187,20 @@ serve(async (req: Request) => {
     }
 
     // ======================================
-    // 6. Create tasks in Google Tasks
+    // 6. Create priorities in Notion
     // ======================================
 
-    const createdTasks = await googleTasks.createTasksFromPriorities(newPriorities);
+    const createdPriorities = [];
+    for (const priority of newPriorities) {
+      try {
+        const created = await notion.createPriority(priority);
+        createdPriorities.push(created);
+      } catch (error) {
+        logger.error(`Failed to create priority: ${priority.title}`, error);
+      }
+    }
 
-    logger.info(`✅ Created ${createdTasks.length} tasks in Google Tasks`);
+    logger.info(`✅ Created ${createdPriorities.length} priorities in Notion`);
 
     // ======================================
     // 7. Log execution
@@ -201,7 +212,7 @@ serve(async (req: Request) => {
       syncType: 'realtime',
       status: 'success',
       prioritiesFound: priorities.length,
-      tasksCreated: createdTasks.length,
+      tasksCreated: createdPriorities.length,
       executionTimeMs: executionTime,
     });
 
@@ -214,7 +225,7 @@ serve(async (req: Request) => {
     const result: SyncResult = {
       conversationsAnalyzed: conversations.length,
       prioritiesDetected: priorities.length,
-      tasksCreated: createdTasks.length,
+      tasksCreated: createdPriorities.length,
       errors: [],
       timestamp: new Date(),
     };
