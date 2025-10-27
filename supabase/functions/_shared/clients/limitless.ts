@@ -22,7 +22,7 @@ export class LimitlessClient {
    */
   async getLifelogs(
     since: string | Date,
-    limit: number = 100
+    limit: number = 10
   ): Promise<LimitlessConversation[]> {
     try {
       const sinceISO = typeof since === 'string' ? since : since.toISOString();
