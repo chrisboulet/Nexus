@@ -47,7 +47,18 @@ export class LimitlessClient {
       }
 
       const data = await response.json();
-      const lifelogs = data.data?.lifelogs || [];
+      const rawLifelogs = data.data?.lifelogs || [];
+
+      // Map Limitless API response to LimitlessConversation type
+      const lifelogs: LimitlessConversation[] = rawLifelogs.map((log: any) => ({
+        id: log.id,
+        title: log.title,
+        transcript: log.markdown || '', // API returns 'markdown' field
+        startTime: log.startTime,
+        endTime: log.endTime,
+        participants: [], // Not provided by API
+        summary: '', // Not provided by API
+      }));
 
       console.log(`[Limitless] Retrieved ${lifelogs.length} lifelogs`);
       return lifelogs;
