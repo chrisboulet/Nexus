@@ -106,34 +106,38 @@ ${conv.summary ? `\nRésumé: ${conv.summary}` : ''}
   private buildAnalysisPrompt(conversationText: string, context?: string): string {
     return `Tu es NEXUS, l'assistant IA de Christian Boulet, fractional CTO chez Boulet Stratégies TI.
 
-Ta mission: analyser les conversations de Christian et extraire les PRIORITÉS ACTIONNABLES.
+Ta mission: analyser les conversations de Christian et extraire TOUTES les priorités potentielles.
 
 ${context ? `\nContexte additionnel:\n${context}\n` : ''}
 
-# Critères de détection
+# Critères de détection (INCLUSIFS)
 
 Cherche ces 3 types de priorités:
 
-1. **ENGAGEMENTS** - Christian a promis de faire quelque chose
-   - Exemples: "je vais te revenir avec une proposition", "je t'envoie mon CV", "je te prépare un document"
+1. **ENGAGEMENTS** - Christian a promis ou dit qu'il va faire quelque chose
+   - Exemples EXPLICITES: "je vais te revenir avec une proposition", "je t'envoie mon CV"
+   - Exemples IMPLICITES: "je vais le régler", "il faut que je...", "je dois..."
+   - Même vague, si ça indique une intention d'action future, INCLURE
    - Contexte souvent: @ordi (travail ordinateur)
 
-2. **DEMANDES** - Quelqu'un a demandé quelque chose à Christian
-   - Exemples: "peux-tu m'envoyer...", "j'aurais besoin que...", "pourrais-tu..."
+2. **DEMANDES** - Quelqu'un a demandé quelque chose à Christian OU Christian a identifié une tâche à faire
+   - Exemples: "peux-tu m'envoyer...", "j'aurais besoin que...", "il faudrait que..."
+   - INCLURE aussi les auto-demandes: "il faut que je vérifie", "je devrais appeler"
    - Contexte: @appels (si retour de call), @ordi (si travail)
 
-3. **DEADLINES** - Échéances mentionnées explicitement
-   - Exemples: "il me faut ça avant vendredi", "deadline 30 octobre", "on se parle la semaine prochaine"
-   - Date précise requise
+3. **DEADLINES** - Échéances mentionnées (même vagues)
+   - Exemples PRÉCIS: "avant vendredi", "deadline 30 octobre"
+   - Exemples VAGUES: "demain", "la semaine prochaine", "bientôt"
+   - Accepter les deadlines implicites aussi
 
-# Consignes strictes
+# Consignes PERMISSIVES
 
-- ❌ NE PAS inventer de priorités qui ne sont pas explicites
-- ❌ NE PAS inclure les discussions générales ou brainstorming vagues
-- ✅ SEULEMENT les actions concrètes et engagements fermes
+- ✅ MIEUX VAUT inclure une priorité douteuse que de la manquer
+- ✅ ACCEPTER les engagements vagues ou informels ("je vais le régler", "faut que je...")
+- ✅ ACCEPTER les intentions même sans deadline précise
+- ✅ Score de confiance bas (0.3-0.5) pour les priorités vagues, élevé (0.7-1.0) pour les explicites
 - ✅ Estimer la durée réaliste (5min, 15min, 30min, 1h, 2h+)
 - ✅ Assigner un contexte (@appels, @ordi, @agenda, @attente)
-- ✅ Score de confiance (0.0 à 1.0)
 
 # Format de réponse
 
