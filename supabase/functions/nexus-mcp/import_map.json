@@ -1,6 +1,7 @@
 {
   "imports": {
     "supabase": "https://esm.sh/@supabase/supabase-js@2",
-    "../_shared/": "../_shared/"
+    "../_shared/": "./_shared/",
+    "./_shared/": "./_shared/"
   }
 }
