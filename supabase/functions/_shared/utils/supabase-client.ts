@@ -10,8 +10,12 @@ export class NexusSupabaseClient {
   private client: SupabaseClient;
 
   constructor(url?: string, serviceKey?: string) {
-    const supabaseUrl = url || Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = serviceKey || Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabaseUrl = url || Deno.env.get('SUPABASE_URL');
+    const supabaseKey = serviceKey || Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Configuration error: SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY not set');
+    }
 
     this.client = createClient(supabaseUrl, supabaseKey);
   }
