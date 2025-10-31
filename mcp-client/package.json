@@ -1,0 +1,16 @@
+{
+  "name": "nexus-mcp-client",
+  "version": "1.0.0",
+  "description": "MCP client bridge for NEXUS serverless function",
+  "main": "nexus-mcp-client.js",
+  "type": "module",
+  "bin": {
+    "nexus-mcp-client": "./nexus-mcp-client.js"
+  },
+  "scripts": {
+    "start": "node nexus-mcp-client.js"
+  },
+  "keywords": ["mcp", "nexus", "supabase"],
+  "author": "",
+  "license": "MIT"
+}
