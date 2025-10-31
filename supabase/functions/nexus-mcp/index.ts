@@ -88,18 +88,35 @@ serve(async (req: Request) => {
     const mcpRequest: MCPRequest = await req.json();
     logger.info(`MCP request: ${mcpRequest.method}`);
 
-    let response: MCPResponse;
+    let response: any;
 
     switch (mcpRequest.method) {
+      case 'initialize':
+        // MCP protocol handshake
+        response = {
+          jsonrpc: '2.0',
+          id: mcpRequest.id,
+          result: {
+            protocolVersion: '2025-06-18',
+            capabilities: {
+              tools: {},
+            },
+            serverInfo: {
+              name: 'nexus-mcp',
+              version: '1.0.0',
+            },
+          },
+        };
+        break;
+
       case 'tools/list':
         // Return list of available tools
         response = {
-          content: [
-            {
-              type: 'text',
-              text: JSON.stringify({ tools: NEXUS_TOOLS }, null, 2),
-            },
-          ],
+          jsonrpc: '2.0',
+          id: mcpRequest.id,
+          result: {
+            tools: NEXUS_TOOLS,
+          },
         };
         break;
 
@@ -111,34 +128,49 @@ serve(async (req: Request) => {
 
         const { name, arguments: args } = mcpRequest.params;
 
+        let toolResult: MCPResponse;
+
         switch (name) {
           case 'nexus_search_conversations':
-            response = await handleSearchConversations(args);
+            toolResult = await handleSearchConversations(args);
             break;
 
           case 'nexus_get_priority':
-            response = await handleGetPriority(args);
+            toolResult = await handleGetPriority(args);
             break;
 
           case 'nexus_list_priorities':
-            response = await handleListPriorities(args);
+            toolResult = await handleListPriorities(args);
             break;
 
           case 'nexus_crm_lookup':
-            response = await handleCRMLookup(args);
+            toolResult = await handleCRMLookup(args);
             break;
 
           case 'nexus_list_commitments':
-            response = await handleListCommitments(args);
+            toolResult = await handleListCommitments(args);
             break;
 
           default:
             throw new Error(`Unknown tool: ${name}`);
         }
+
+        response = {
+          jsonrpc: '2.0',
+          id: mcpRequest.id,
+          result: toolResult,
+        };
         break;
 
       default:
-        throw new Error(`Unknown MCP method: ${mcpRequest.method}`);
+        response = {
+          jsonrpc: '2.0',
+          id: mcpRequest.id,
+          error: {
+            code: -32601,
+            message: `Method not found: ${mcpRequest.method}`,
+          },
+        };
     }
 
     const executionTime = Date.now() - startTime;

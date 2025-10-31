@@ -4,8 +4,10 @@
  */
 
 export interface MCPRequest {
-  method: 'tools/list' | 'tools/call';
-  params?: MCPCallParams;
+  jsonrpc?: string;
+  id?: number | string;
+  method: 'initialize' | 'tools/list' | 'tools/call';
+  params?: MCPCallParams | Record<string, any>;
 }
 
 export interface MCPCallParams {
